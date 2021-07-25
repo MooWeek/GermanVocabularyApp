@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GermanVocabularyApp
 {
@@ -13,6 +9,11 @@ namespace GermanVocabularyApp
         {
             string inputStringWords = File.ReadAllText(pathFoFile);
             return VocabularyConverter.ToLoverList(inputStringWords);
+        }
+
+        public static void WriteListToFile(List<string> rows, string pathToFile)
+        {
+            File.WriteAllLines(pathToFile, rows);
         }
     }
 }

@@ -7,25 +7,27 @@ namespace GermanVocabularyApp
 {
     class Program
     {
-        static string s_vocabularyPathWords = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\", "Data\\de-dictionary.tsv"));
+        static readonly string s_vocabularyPathWords = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\", "Data\\de-dictionary.tsv"));
         static void Main(string[] args)
         {
+            string inputPathWords = Console.ReadLine();
 
-            //string inputPathWords = Console.ReadLine();
-
-            string inputPathWords = "I:\\Develop\\C#Projs\\GermanVocabularyApp\\Data\\de-test-words.tsv"; // TO DELETE(ONLY FOR TEST)
             try
             {
-                //string resultPath = Console.ReadLine();
+                string resultPath = Console.ReadLine();
 
                 List<string> vocabularyMain = FileWorker.ReadFileToListStrings(s_vocabularyPathWords);
-
                 List<string> vocabularyToRewrite = FileWorker.ReadFileToListStrings(inputPathWords);
 
-                foreach(var wordToRewrite in vocabularyToRewrite)
+                List<string> result = new();
+
+                foreach (var wordToRewrite in vocabularyToRewrite)
                 {
-                    FindSuitableWords(wordToRewrite, vocabularyMain);
+                    List<string> rewrittenWords = FindSuitableWords(wordToRewrite, vocabularyMain);
+                    result.AddRange(rewrittenWords);
                 }
+
+                FileWorker.WriteListToFile(result, resultPath);
             }
             catch
             {
@@ -33,13 +35,14 @@ namespace GermanVocabularyApp
             }
         }
 
-        private static void FindSuitableWords(string wordToRewrite, List<string> vocabularyMain)
+        private static List<string> FindSuitableWords(string wordToRewrite, List<string> vocabularyMain)
         {
+            List<string> result = new();
+
             string firstWord = "";
             string secondWord = "";
 
             List<string> wordsEqualsFirstPart = FindWordsForFirstPart(wordToRewrite, vocabularyMain);
-
 
             foreach (var firstPartWord in wordsEqualsFirstPart)
             {
@@ -56,15 +59,11 @@ namespace GermanVocabularyApp
             }
 
             if (firstWord.Length > 0 && secondWord.Length > 0)
-            {
-                Console.WriteLine($"{wordToRewrite} -> (out) {firstWord}, {secondWord}");
-            }
+                result.Add($"{wordToRewrite} -> (out) {firstWord}, {secondWord}");
             else
-            {
-                Console.WriteLine($"{wordToRewrite} -> (out) {wordToRewrite}");
-            }
+                result.Add($"{wordToRewrite} -> (out) {wordToRewrite}");
 
-            Console.WriteLine();
+            return result;
         }
 
         private static List<string> FindWordsForSecondPart(string wordSecondPart, List<string> vocabularyMain)
