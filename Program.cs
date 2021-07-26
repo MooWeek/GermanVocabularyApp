@@ -10,10 +10,12 @@ namespace GermanVocabularyApp
         static readonly string s_vocabularyPathWords = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\", "Data\\de-dictionary.tsv"));
         static void Main(string[] args)
         {
+            Console.WriteLine("Enter input path to File:");
             string inputPathWords = Console.ReadLine();
 
             try
             {
+                Console.WriteLine("Enter output path to File:");
                 string resultPath = Console.ReadLine();
 
                 List<string> vocabularyMain = FileWorker.ReadFileToListStrings(s_vocabularyPathWords);
